@@ -191,9 +191,9 @@ public class ControladorSupervisor {
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
 
-            InputStream imagenStream = getClass().getResourceAsStream("/static/imagenes/logo-tambo.png");
+            InputStream imagenStream = getClass().getResourceAsStream("/static/imagenes/logo-samsung.png");
             if (imagenStream == null) {
-                throw new IOException("No se encontró la imagen en /static/imagenes/logo-tambo.png");
+                throw new IOException("No se encontró la imagen en /static/imagenes/logo-samsung.png");
             }
             byte[] imagenBytes = imagenStream.readAllBytes();
             ImageData imageData = ImageDataFactory.create(imagenBytes);
