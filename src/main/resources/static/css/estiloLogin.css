@@ -1,0 +1,454 @@
+/* ========================================
+   ESTILO SAMSUNG MEJORADO - Puro CSS
+   ======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin: 0;
+    position: relative;
+    /* Imagen local */
+    background-image: url('/imagenes/fondo-login.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(10, 20, 40, 0.8) 0%, 
+        rgba(20, 40, 80, 0.6) 50%,
+        rgba(10, 20, 40, 0.8) 100%
+    );
+    z-index: 0;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 30% 70%, rgba(20, 40, 160, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 70% 30%, rgba(37, 99, 235, 0.06) 0%, transparent 50%);
+    z-index: 0;
+}
+
+/* Capa 3: Círculo decorativo inferior */
+.decorative-circle-bottom {
+    position: fixed;
+    bottom: -250px;
+    left: -250px;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Capa 4: Patrón de cuadrícula sutil */
+.decorative-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        linear-gradient(rgba(20, 40, 160, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(20, 40, 160, 0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Capa 5: Líneas decorativas diagonales */
+.decorative-lines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        repeating-linear-gradient(45deg, 
+            transparent,
+            transparent 40px,
+            rgba(20, 40, 160, 0.01) 40px,
+            rgba(20, 40, 160, 0.01) 41px
+        );
+    pointer-events: none;
+    z-index: 0;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 440px;
+}
+
+/* ===== TARJETA PRINCIPAL ===== */
+/* Asegura que la tarjeta se vea bien sobre el fondo */
+.storefront {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 28px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25), 
+                0 8px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== HEADER ===== */
+.header {
+    background: linear-gradient(180deg, #ffffff 0%, #f8f9fc 100%);
+    padding: 35px 20px 25px 20px;
+    text-align: center;
+    border-bottom: 1px solid #eef2f6;
+    position: relative;
+}
+
+.header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #1428a0, #3b5de7, #1428a0);
+}
+
+.header img {
+    max-width: 130px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.05));
+    transition: transform 0.3s ease;
+}
+
+.header img:hover {
+    transform: scale(1.02);
+}
+
+/* ===== BODY CONTENT ===== */
+.body-content {
+    background: #ffffff;
+    padding: 0 30px 35px 30px;
+}
+
+/* ===== SECCIÓN DE BIENVENIDA ===== */
+.welcome-section {
+    text-align: center;
+    padding: 25px 0 5px 0;
+}
+
+.welcome-section h2 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #1e1e1e;
+    margin-bottom: 4px;
+    letter-spacing: -0.5px;
+}
+
+.welcome-section p {
+    color: #6b7280;
+    font-size: 0.95rem;
+    font-weight: 400;
+    margin: 0;
+}
+
+/* ===== SECCIÓN LOGIN ===== */
+.login-section {
+    background: #ffffff;
+    margin-top: 15px;
+    text-align: left;
+}
+
+.login-section h3 {
+    color: #1e1e1e;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f0f2f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.login-section h3::before {
+    content: '';
+    width: 4px;
+    height: 20px;
+    background: linear-gradient(180deg, #1428a0, #3b5de7);
+    border-radius: 4px;
+}
+
+/* ===== GRUPO DE FORMULARIO ===== */
+.form-group {
+    margin-top: 16px;
+}
+
+.form-group:first-of-type {
+    margin-top: 0;
+}
+
+/* ===== INPUT WRAPPER ===== */
+.input-wrapper {
+    position: relative;
+}
+
+/* ===== ESTILO DEL INPUT ===== */
+.form-control {
+    width: 100%;
+    height: 58px;
+    padding: 1rem 0.75rem 0.25rem 0.75rem;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: #1e1e1e;
+    background: #fafbfc;
+    border: 2px solid #e8ecf1;
+    border-radius: 14px;
+    outline: none;
+    transition: all 0.25s ease;
+}
+
+.form-control:focus {
+    border-color: #1428a0;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(20, 40, 160, 0.06);
+}
+
+/* ===== ESTILO DEL LABEL ===== */
+.input-wrapper label {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #8b95a9;
+    font-size: 0.9rem;
+    font-weight: 400;
+    pointer-events: none;
+    transition: all 0.25s ease;
+    background: transparent;
+    padding: 0 4px;
+}
+
+.input-wrapper label i {
+    margin-right: 8px;
+    width: 16px;
+    color: #9ca3af;
+    transition: color 0.25s ease;
+}
+
+/* ===== CUANDO EL INPUT TIENE FOCO O TIENE TEXTO ===== */
+.form-control:focus~label,
+.form-control:not(:placeholder-shown)~label {
+    top: 0.65rem;
+    transform: translateY(0);
+    font-size: 0.7rem;
+    color: #1428a0;
+}
+
+.form-control:focus~label i,
+.form-control:not(:placeholder-shown)~label i {
+    color: #1428a0;
+}
+
+/* ===== SOLUCIÓN PARA AUTOFILL ===== */
+.form-control:-webkit-autofill {
+    background-color: #fafbfc !important;
+    -webkit-box-shadow: 0 0 0 1000px #fafbfc inset !important;
+    box-shadow: 0 0 0 1000px #fafbfc inset !important;
+    -webkit-text-fill-color: #1e1e1e !important;
+}
+
+.form-control:-webkit-autofill~label {
+    top: 0.65rem !important;
+    transform: translateY(0) !important;
+    font-size: 0.7rem !important;
+    color: #1428a0 !important;
+}
+
+.form-control:-webkit-autofill~label i {
+    color: #1428a0 !important;
+}
+
+/* ===== BOTÓN ACCEDER MEJORADO ===== */
+.btnAcceder {
+    width: 100%;
+    background: linear-gradient(135deg, #1428a0, #2563eb);
+    color: white;
+    padding: 17px 12px;
+    border: none;
+    border-radius: 14px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-top: 24px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(20, 40, 160, 0.25);
+}
+
+.btnAcceder:hover::before {
+    opacity: 1;
+}
+
+.btnAcceder:hover::after {
+    width: 300px;
+    height: 300px;
+}
+
+/* Hover */
+.btnAcceder:hover {
+    background: linear-gradient(135deg, #0f1f7a, #1a3bb5);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(20, 40, 160, 0.35);
+    letter-spacing: 1px;
+}
+
+/* Active (clic) */
+.btnAcceder:active {
+    transform: translateY(0px) scale(0.97);
+    box-shadow: 0 2px 15px rgba(20, 40, 160, 0.2);
+    transition-duration: 0.1s;
+}
+
+/* Texto del botón */
+.btnAcceder span {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btnAcceder span i {
+    transition: transform 0.3s ease;
+}
+
+.btnAcceder:hover span i {
+    transform: translateX(4px);
+}
+
+/* ===== ALERTAS ===== */
+.alert {
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    border: 1px solid transparent;
+}
+
+.alert i {
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.alert span {
+    flex: 1;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.5;
+    padding: 0 4px;
+    transition: opacity 0.2s;
+    font-weight: 300;
+}
+
+.btn-close:hover {
+    opacity: 1;
+}
+
+.alert-danger {
+    background: #fef2f2;
+    color: #991b1b;
+    border-color: #fecaca;
+}
+
+.alert-success {
+    background: #f0fdf4;
+    color: #166534;
+    border-color: #bbf7d0;
+}
+
+.alert-info {
+    background: #eff6ff;
+    color: #1e40af;
+    border-color: #bfdbfe;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 480px) {
+    .body-content {
+        padding: 0 20px 25px 20px;
+    }
+    
+    .header {
+        padding: 25px 15px 20px 15px;
+    }
+    
+    .header img {
+        max-width: 100px;
+    }
+    
+    .welcome-section h2 {
+        font-size: 1.3rem;
+    }
+    
+    .welcome-section p {
+        font-size: 0.85rem;
+    }
+    
+    .login-section h3 {
+        font-size: 1rem;
+    }
+    
+    .form-control {
+        height: 52px;
+        font-size: 0.9rem;
+        padding: 0.9rem 0.75rem 0.2rem 0.75rem;
+    }
+    
+    .btnAcceder {
+        font-size: 0.95rem;
+        padding: 15px 12px;
+    }
+}

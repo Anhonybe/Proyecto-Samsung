@@ -1,0 +1,37 @@
+package com.tambo.test.Controlador;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.tambo.test.Servicios.UsuarioServicios;
+
+@Controller
+public class Controlador {
+    
+    @Autowired
+    private UsuarioServicios userService;
+    
+    @GetMapping("/")
+    public String home() {
+        return "redirect:/login";
+    }
+    
+    @GetMapping("/login")
+    public String login(@RequestParam(value = "error", required = false) String error,
+                       @RequestParam(value = "logout", required = false) String logout,
+                       Model model) {
+        if (error != null) {
+            model.addAttribute("error", "Credenciales inválidas");
+        }
+        if (logout != null) {
+            model.addAttribute("message", "Has cerrado sesión correctamente");
+        }
+        return "login";
+    }
+
+    
+    
+}

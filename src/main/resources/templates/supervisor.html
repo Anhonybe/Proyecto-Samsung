@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Incidencias - Supervisor Tambo</title>
+    <link rel="stylesheet" th:href="@{/css/estiloSupervisor.css}">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Modal registrar categoria incidencia -->
+    <div id="modalCategoria" class="modal">
+        <div class="modal-content">
+            <h2>Nueva Categoría</h2>
+            <form method="post" th:action="@{/supervisor/categorias-incidencia/guardar}">
+                <input type="hidden" id="categoriaId" name="id" />
+
+                <label for="nombreCategoria">Nombre de Categoría</label>
+                <input type="text" id="nombreCategoria" name="nombre" required>
+
+                <label for="descripcionCategoria">Descripción</label>
+                <input type="text" id="descripcionCategoria" name="descripcion" required>
+
+                <div class="acciones">
+                    <button type="button" class="cerrar-btn" onclick="cerrarModalCatIncidencia()">Cancelar</button>
+                    <button type="submit" class="guardar-btn">Guardar</button>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+
+
+    <!-- Modal editar categoria incidencia-->
+    <div id="modalCategoriaeditar" class="modal">
+        <div class="modal-content">
+            <h2>Nueva Categoría</h2>
+            <form method="post" th:action="@{/supervisor/categorias-incidencia/guardar}">
+                <input type="hidden" id="categoriaId" name="id" />
+
+                <label for="nombreCategoria">Nombre de Categoría</label>
+                <input type="text" id="nombreCategoria" name="nombre" required>
+
+                <label for="descripcionCategoria">Descripción</label>
+                <input type="text" id="descripcionCategoria" name="descripcion" required>
+
+                <div class="acciones">
+                    <button type="button" class="cerrar-btn" onclick="cerrarModalCatIncidencia()">Cancelar</button>
+                    <button type="submit" class="guardar-btn">Guardar</button>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div id="modalIncidencia" class="modal">
+        <div class="modal-content">
+            <h2>Nueva Incidencia</h2>
+            <form th:action="@{/supervisor/incidencias/guardar}" method="post" enctype="multipart/form-data"
+                th:object="${incidencia}">
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="titulo-incidencia">Título de la Incidencia</label>
+                        <input type="text" id="titulo-incidencia" name="titulo" required
+                            placeholder="Título descriptivo">
+                    </div>
+                    <div class="form-group">
+                        <label for="categoria" class="form-label">Categoría</label>
+                        <select id="categoria" name="categoria.id" class="form-select" required>
+                            <option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nombre}"></option>
+                        </select>
+
+                    </div>
+                    <!-- Tipo de Incidencia -->
+                    <div class="form-group">
+                        <label for="tipo" class="form-label">Tipo de Incidencia</label>
+                        <select id="tipo" name="tipo" class="form-select" onchange="mostrarSelectorRelacionado()"
+                            required>
+                            <option value="">-- Seleccionar --</option>
+                            <option value="producto">Producto</option>
+                            <option value="maquinaria">Maquinaria</option>
+                            <option value="infraestructura">Infraestructura</option>
+                        </select>
+                    </div>
+
+                    <!-- Selects Condicionales -->
+                    <div class="form-group" id="selectProducto" style="display: none;">
+                        <label for="producto" class="form-label">Producto</label>
+                        <select id="producto" name="producto.id" class="form-select">
+                            <option th:each="p : ${productos}" th:value="${p.id}" th:text="${p.nombre}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="selectMaquinaria" style="display: none;">
+                        <label for="maquinaria" class="form-label">Maquinaria</label>
+                        <select id="maquinaria" name="maquinaria.id" class="form-select">
+                            <option th:each="m : ${maquinarias}" th:value="${m.id}" th:text="${m.nombre}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="selectInfraestructura" style="display: none;">
+                        <label for="infraestructura" class="form-label">Infraestructura</label>
+                        <select id="infraestructura" name="infraestructura.id" class="form-select">
+                            <option th:each="i : ${infraestructuras}" th:value="${i.id}" th:text="${i.descripcion}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="prioridad-incidencia">Prioridad</label>
+                        <select id="prioridad-incidencia" name="prioridad" required>
+                            <option value="">Seleccionar prioridad</option>
+                            <option value="baja">Baja</option>
+                            <option value="media">Media</option>
+                            <option value="alta">Alta</option>
+                            <option value="critica">Crítica</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha-incidencia">Fecha de Ocurrencia</label>
+                        <input type="datetime-local" id="fecha-incidencia" name="fechaRegistro" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="evidencia">Evidencia:</label>
+                        <input type="file" id="evidencia" name="evidencia" />
+                    </div>
+
+                    <div class="acciones">
+                        <button type="button" class="cerrar-btn" onclick="cerrarModalIncidencia()">Cancelar</button>
+                        <button type="submit" class="guardar-btn">Guardar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="header">
+            <div class="logo-titulo">
+                <img src="../Imagenes/logo-samsung.png" alt="Logo Samsung">
+            </div>
+            <div class="texto-header">
+                <h1>Sistema de Gestión de Incidencias</h1>
+                <p>Supervisión de Tienda - <strong><span th:text="${usuario.nombre}"></span></strong> de la tienda
+                    <strong th:text="${supervisor.tienda.nombre}"></strong></span>
+                </p>
+            </div>
+        </div>
+
+
+        <nav class="nav-menu">
+            <button class="nav-btn active" onclick="showSection('categorias')">Categorías</button>
+            <button class="nav-btn" onclick="showSection('incidencias')">Registrar Incidencia</button>
+            <button class="nav-btn" onclick="showSection('reportes')">Mis Reportes</button>
+            <button class="nav-btn" onclick="showSection('graficos')">Gráficos</button>
+        </nav>
+
+
+        <!-- Categorías Section -->
+        <div id="categorias" class="section active">
+            <h2>Gestión de Categorías</h2>
+
+            <!-- Mensaje de éxito registrar categoria incidencia -->
+            <div th:if="${exitoRegistroCatIncidencia}" class="alert alert-success" role="alert">
+                <i class="fas fa-check-circle"></i>
+                <span th:text="${exitoRegistroCatIncidencia}"></span>
+                <button type="button" class="btn-close" onclick="this.parentElement.style.display='none'">×</button>
+            </div>
+
+            <!-- Mensaje de error registrar categoria incidencia -->
+            <div th:if="${errorRegistroCatIncidencia}" class="alert alert-danger" role="alert">
+                <i class="fas fa-exclamation-circle"></i>
+                <span th:text="${errorRegistroCatIncidencia}"></span>
+                <button type="button" class="btn-close" onclick="this.parentElement.style.display='none'">×</button>
+            </div>
+
+            <!-- Mensaje de éxito al eliminar categoria incidencia -->
+            <div th:if="${exitoEliminarCatIncidencia}" class="alert alert-success" role="alert">
+                <i class="fas fa-check-circle"></i>
+                <span th:text="${exitoEliminarCatIncidencia}"></span>
+                <button type="button" class="btn-close" onclick="this.parentElement.style.display='none'">×</button>
+            </div>
+
+            <!-- Mensaje de error al eliminar categoria incidencia -->
+            <div th:if="${errorEliminarCatIncidencia}" class="alert alert-danger" role="alert">
+                <i class="fas fa-exclamation-circle"></i>
+                <span th:text="${errorEliminarCatIncidencia}"></span>
+                <button type="button" class="btn-close" onclick="this.parentElement.style.display='none'">×</button>
+            </div>
+
+            <button class="btn btn-primary" onclick="abrirModalCatIncidencia()">
+                <i class="fas fa-plus-circle"></i> Agregar Categoría
+            </button>
+
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-hashtag"></i> ID</th>
+                            <th><i class="fas fa-tag"></i> Nombre</th>
+                            <th><i class="fas fa-align-left"></i> Descripción</th>
+                            <th><i class="fas fa-calendar-alt"></i> Fecha Creación</th>
+                            <th><i class="fas fa-cogs"></i> Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-categorias">
+                        <tr th:each="cat : ${categorias}">
+                            <td th:text="${cat.id}">ID</td>
+                            <td th:text="${cat.nombre}">Nombre</td>
+                            <td th:text="${cat.descripcion}">Descripción</td>
+                            <td th:text="${cat.fechaCreacion}">Fecha</td>
+                            <td>
+                                <button class="btn btn-warning"
+                                    th:attr="data-id=${cat.id}, data-nombre=${cat.nombre}, data-descripcion=${cat.descripcion}"
+                                    onclick="abrirModalEditarCategoria(this)">
+                                    <i class="fas fa-edit"></i> Editar
+                                </button>
+                                <form th:action="@{/supervisor/categorias-incidencia/eliminar}" method="post"
+                                    style="display:inline;">
+                                    <input type="hidden" name="id" th:value="${cat.id}" />
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                    <button type="submit" class="btn btn-danger"
+                                        onclick="return confirm('¿Seguro que deseas eliminar esta categoría?')">
+                                        <i class="fas fa-trash-alt"></i> Eliminar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Incidencias Section -->
+        <div id="incidencias" class="section">
+            <h2>Registrar Nueva Incidencia</h2>
+
+
+            <!-- Mensaje de éxito -->
+            <div th:if="${exitoRegistroIncidencia}" class="alert alert-success alert-dismissible fade show"
+                role="alert">
+                <span th:text="${exitoRegistroIncidencia}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <!-- Mensaje de error -->
+            <div th:if="${errorRegistroIncidencia}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="${errorRegistroIncidencia}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div class="search-filters">
+                <input type="text" id="buscar-reporte" placeholder="Buscar por título...">
+                <select id="filtro-categoria">
+                    <option value="">Todas las categorías</option>
+                    <option th:each="cat : ${categorias}" th:value="${cat.nombre.toLowerCase()}"
+                        th:text="${cat.nombre}"></option>
+                </select>
+
+                <select id="filtro-estado">
+                    <option value="">Todos los estados</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="En proceso">En Proceso</option>
+                    <option value="resuelto">Resuelto</option>
+                </select>
+                <input type="date" id="fecha-desde">
+                <input type="date" id="fecha-hasta">
+                <button class="btn btn-primary" onclick="aplicarFiltros()">Filtrar</button>
+            </div>
+            <button class="btn btn-primary" onclick="abrirModalIncidencia()"><i
+                    class="fas fa-plus-circle pe-1"></i>Agregar Incidencia</button>
+
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-hashtag"></i> ID</th>
+                            <th><i class="fas fa-heading"></i> Título</th>
+                            <th><i class="fas fa-tag"></i> Tipo</th>
+                            <th><i class="fas fa-cube"></i> Elemento</th>
+                            <th><i class="fas fa-folder"></i> Categoría</th>
+                            <th><i class="fas fa-flag"></i> Prioridad</th>
+                            <th><i class="fas fa-calendar-alt"></i> Fecha</th>
+                            <th><i class="fas fa-circle"></i> Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-incidencias">
+                        <tr th:each="inc : ${incidencias}" th:attr="data-titulo=${inc.titulo.toLowerCase()}, 
+                 data-categoria=${inc.categoria.nombre.toLowerCase()}, 
+                 data-estado=${inc.estado.toLowerCase()}, 
+                 data-fecha=${#temporals.format(inc.fechaRegistro, 'yyyy-MM-dd')}">
+
+                            <td th:text="${inc.id}">ID</td>
+                            <td th:text="${inc.titulo}">Título</td>
+                            <td th:text="${inc.tipo}">Tipo</td>
+
+                            <td>
+                                <span th:if="${inc.tipo == 'producto'}">Producto</span>
+                                <span th:if="${inc.tipo == 'maquinaria'}">Maquinaria</span>
+                                <span th:if="${inc.tipo == 'infraestructura'}">Infraestructura</span>
+                            </td>
+
+                            <td th:text="${inc.categoria.nombre}">Categoría</td>
+                            <td th:text="${inc.prioridad}">Prioridad</td>
+                            <td th:text="${#temporals.format(inc.fechaRegistro, 'dd/MM/yyyy HH:mm')}">Fecha</td>
+
+                            <td>
+                                <span class="status pendiente" th:if="${inc.estado == 'Pendiente'}"
+                                    th:text="${inc.estado}"></span>
+                                <span class="status proceso" th:if="${inc.estado == 'En proceso'}"
+                                    th:text="${inc.estado}"></span>
+                                <span class="status observacion" th:if="${inc.estado == 'En observacion'}"
+                                    th:text="${inc.estado}"></span>
+                                <span class="status resuelto" th:if="${inc.estado == 'Solucionado'}"
+                                    th:text="${inc.estado}"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+
+
+
+
+        </div>
+
+        <!-- Reportes Section -->
+        <div id="reportes" class="section">
+            <h2>Reportes de Incidencias</h2>
+
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-hashtag"></i> ID Reporte</th>
+                            <th><i class="fas fa-exclamation-triangle"></i> Incidencia</th>
+                            <th><i class="fas fa-check-circle"></i> Solución (Reporte)</th>
+                            <th><i class="fas fa-tag"></i> Tipo</th>
+                            <th><i class="fas fa-cube"></i> Nombre</th>
+                            <th><i class="fas fa-calendar-alt"></i> Fecha de Registro</th>
+                            <th><i class="fas fa-cogs"></i> Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-reportes">
+                        <tr th:each="reporte : ${reportes}">
+                            <td th:text="${reporte.id}"></td>
+                            <td th:text="${reporte.incidencia.titulo}"></td>
+                            <td th:text="${reporte.descripcion}"></td>
+                            <td th:text="${reporte.incidencia.tipo}"></td>
+                            <td>
+                                <span th:if="${reporte.incidencia.tipo == 'producto'}"
+                                    th:text="${reporte.incidencia.producto.nombre}">Producto</span>
+                                <span th:if="${reporte.incidencia.tipo == 'maquinaria'}"
+                                    th:text="${reporte.incidencia.maquinaria.nombre}">Maquinaria</span>
+                                <span th:if="${reporte.incidencia.tipo == 'infraestructura'}"
+                                    th:text="${reporte.incidencia.infraestructura.nombre}">Infraestructura</span>
+                            </td>
+                            <td th:text="${#temporals.format(reporte.fechaRegistro, 'dd/MM/yyyy')}"></td>
+                            <td>
+                                <!-- Botón para abrir el modal -->
+                                <button type="button" class="btn btn-info" data-bs-toggle="modal"
+                                    th:data-bs-target="'#modalDetalle_' + ${reporte.id}">
+                                    <i class="fas fa-eye"></i> Ver Detalle
+                                </button>
+
+                                <a th:href="@{/supervisor/reporte/pdf/{id}(id=${reporte.id})}" target="_blank"
+                                    class="btn btn-danger">
+                                    <i class="fas fa-file-pdf"></i> Generar PDF
+                                </a>
+
+
+
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Gráficos Section -->
+        <div id="graficos" class="section">
+            <h2>Análisis y Gráficos</h2>
+
+            <div class="charts-container">
+                <div class="chart-box">
+                    <h3>Estado de Asignación de Incidencias</h3>
+                    <canvas id="estadoIncidenciasChart" width="60" height="40"></canvas>
+
+                </div>
+
+                <div class="chart-box">
+                    <h3>Distribución de Incidencias por Turno</h3>
+                    <canvas id="turnoChart" width="600" height="400"></canvas>
+                </div>
+
+                <div class="chart-box">
+                    <h3>Las 5 incidencias resueltas mas rapidas</h3>
+                    <canvas id="graficoIncidenciasRapidas" width="400" height="200"></canvas>
+
+                </div>
+
+                <div class="chart-box">
+                    <h3>Cantidad de Incidencias por Estado</h3>
+                    <canvas id="graficoIncidenciasEstado"></canvas>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para detalles -->
+    <div id="modal-detalle" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="cerrarModal()">&times;</span>
+            <h2>Detalle de Incidencia</h2>
+            <div id="contenido-modal">
+                <!-- Contenido dinámico -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal con detalles de cada reporte -->
+    <div th:each="reporte : ${reportes}">
+        <div class="modal fade" th:id="'modalDetalle_' + ${reporte.id}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Detalle del Reporte</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <!-- Datos del Reporte -->
+                        <p><strong>ID:</strong> <span th:text="${reporte.id}"></span></p>
+                        <p><strong>El problema:</strong> <span th:text="${reporte.incidencia.titulo}"></span></p>
+                        <p><strong>La solucion:</strong> <span th:text="${reporte.descripcion}"></span></p>
+                        <p><strong>Fecha de solucion:</strong> <span th:text="${reporte.fechaRegistro}"></span></p>
+                        <p><strong>Tipo:</strong> <span th:text="${reporte.incidencia.tipo}"></span></p>
+                        <p><strong>Prioridad:</strong> <span th:text="${reporte.incidencia.prioridad}"></span></p>
+                        <p><strong>Estado:</strong> <span th:text="${reporte.incidencia.estado}"></span></p>
+                        <div class="row">
+                            <div class="col-md-6" th:if="${reporte.incidencia.evidenciaIncidencia != null}">
+                                <p><strong>Imagen del problema:</strong></p>
+                                <img th:src="@{'/evidencias/' + ${reporte.incidencia.evidenciaIncidencia}}"
+                                    class="img-fluid rounded border" alt="Imagen de Incidencia">
+                            </div>
+                            <div class="col-md-6" th:if="${reporte.imagen != null}">
+                                <p><strong>Imagen de la solución:</strong></p>
+                                <img th:src="@{'/reporte/' + ${reporte.imagen}}" class="img-fluid rounded border"
+                                    alt="Imagen de Reporte">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script th:src="@{/js/supervisorScript.js}"></script>
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            const turnoCtx = document.getElementById('turnoChart');
+
+            if (turnoCtx) {
+                // Obtener datos desde Spring Boot (Map en Thymeleaf)
+                const etiquetas = ['Mañana', 'Tarde', 'Noche'];
+                const cantidades = [
+                /*[[${conteoTurnos.get('Mañana') ?: 0}]]*/,
+                /*[[${conteoTurnos.get('Tarde') ?: 0}]]*/,
+                    /*[[${conteoTurnos.get('Noche') ?: 0}]]*/
+                ];
+
+                console.log("Turnos:", etiquetas);
+                console.log("Cantidades:", cantidades);
+
+                new Chart(turnoCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: etiquetas,
+                        datasets: [
+                            {
+                                label: 'Cantidad de incidencias por turno',
+                                data: cantidades,
+                                backgroundColor: ['#fbc02d', '#42a5f5', '#7e57c2'],
+                                borderRadius: 5
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top' },
+                            title: {
+                                display: true,
+                                text: ''
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            const estadoCtx = document.getElementById('estadoIncidenciasChart');
+
+            if (estadoCtx) {
+                const etiquetas = ['Asignadas', 'No Asignadas'];
+                const cantidades = [
+                /*[[${asignadas}]]*/,
+                    /*[[${noAsignadas}]]*/
+                ];
+
+                console.log("Estados:", etiquetas);
+                console.log("Cantidad por estado:", cantidades);
+
+                new Chart(estadoCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: etiquetas,
+                        datasets: [{
+                            data: cantidades,
+                            backgroundColor: ['#4caf50', '#f44336'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true, // si quieres que el tamaño se adapte al contenedor
+                        plugins: {
+                            legend: { position: 'bottom' },
+                            title: {
+                                display: true,
+                                text: ''
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+
+    <script th:inline="javascript">
+        let incidenciasRapidas = /*[[${incidenciasRapidas}]]*/[];
+
+        const labels = incidenciasRapidas.map(item => `${item.id} (${item.titulo})`);
+        const dias = incidenciasRapidas.map(item => item.dias);
+
+        new Chart(document.getElementById("graficoIncidenciasRapidas"), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Días para resolver',
+                    data: dias,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: ''
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script th:inline="javascript">
+        let incidenciasPorEstado = /*[[${incidenciaPorEstado}]]*/ {};
+
+        const estados = Object.keys(incidenciasPorEstado);
+        const cantidades = Object.values(incidenciasPorEstado);
+
+        new Chart(document.getElementById("graficoIncidenciasEstado"), {
+            type: 'doughnut',
+            data: {
+                labels: estados,
+                datasets: [{
+                    label: 'Cantidad por Estado',
+                    data: cantidades,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(75, 192, 192, 0.6)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Cantidad de Incidencias por Estado'
+                    }
+                }
+            }
+        });
+    </script>
+
+
+
+
+
+</body>
+
+</html>
